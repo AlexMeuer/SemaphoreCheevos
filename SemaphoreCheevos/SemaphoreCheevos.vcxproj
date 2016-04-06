@@ -39,8 +39,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(BOOST_ROOT);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.7\include;C:\Program Files (x86)\MySQL\MySQL Server 5.7\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(BOOST_ROOT)\stage\lib;C:\Program Files (x86)\MySQL\MySQL Server 5.7\lib;C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.7\lib\opt;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SFML)\include;$(BOOST_ROOT);C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.7\include;C:\Program Files (x86)\MySQL\MySQL Server 5.7\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SFML)\lib;$(BOOST_ROOT)\stage\lib;C:\Program Files (x86)\MySQL\MySQL Server 5.7\lib;C:\Program Files (x86)\MySQL\MySQL Connector C++ 1.1.7\lib\opt;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -48,6 +48,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -69,7 +70,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CheevoTracker.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CheevoTracker.h" />
+    <ClInclude Include="Game.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

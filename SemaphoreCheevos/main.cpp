@@ -1,69 +1,36 @@
-#include <stdlib.h>
-#include <iostream>
+#if _DEBUG
+#pragma comment(lib, "sfml-graphics-d.lib")
+#pragma comment(lib, "sfml-main-d.lib")
+#pragma comment(lib, "sfml-network-d.lib")
+#pragma comment(lib, "sfml-system-d.lib")
+#pragma comment(lib, "sfml-window-d.lib")
+#pragma comment(lib, "sfml-audio-d.lib")
+#else
+#pragma comment(lib, "sfml-graphics.lib")
+#pragma comment(lib, "sfml-main.lib")
+#pragma comment(lib, "sfml-network.lib")
+#pragma comment(lib, "sfml-system.lib")
+#pragma comment(lib, "sfml-window.lib")
+#pragma comment(lib, "sfml-audio.lib")
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")	//get rid of console window for release build
+#endif
 
-#include <mysql_connection.h>
-
-#include <cppconn/driver.h>
-#include <cppconn/exception.h>
-#include <cppconn/resultset.h>
-#include <cppconn/statement.h>
-
-#define VARCHAR_LENGTH 255
+#include "CheevoTracker.h"
 
 using namespace std;
 
-//res->getString(..) fails, this is the alternative.
-string blobToString(istream* blob) {
-	//no error checking
-	char * str = new char[255];
-	blob->getline(str, VARCHAR_LENGTH);
-	string result = str;
-	delete[] str;
-	return result;
-}
-
 int main() {
 
-	try
-	{
-		sql::Driver *driver;
-		sql::Connection *con;
-		sql::Statement *stmt;
-		sql::ResultSet *res;
+	CheevoTracker tracker;
 
-		//Create a connection
-		driver = get_driver_instance();
-		con = driver->connect("tcp://127.0.0.1:3306", "root", "esse49");
+	std::cout << tracker.isUnlocked("test_cheevo") << std::endl;
 
-		//Connect to the database
-		con->setSchema("engineeringDB");
+	tracker.unlock("test_cheevo");
+	std::cout << "unlocked test_cheevo..." << std::endl;
 
-		stmt = con->createStatement();
-		res = stmt->executeQuery("SELECT Name, IsAchieved from Cheevos");
-		while (res->next())
-		{
-			//Access column data by alias or column name
-			//cout << res->getString("_message") << endl;
+	std::cout << tracker.isUnlocked("test_cheevo") << std::endl;
 
-			//Access column data by numeric offset (1 is the first column)
-			cout << "Cheevo: " << blobToString(res->getBlob(1)) << endl;
-			cout << "Achieved: " << (res->getBoolean(2) ? "TRUE" : "FALSE") << endl;
-
-
-		}
-
-		delete res;
-		delete stmt;
-		delete con;
-	}
-	catch (sql::SQLException &e)
-	{
-		cout << "# ERR: SQLException in " << __FILE__;
-		cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
-		cout << "# ERR: " << e.what();
-		cout << " (MySQL error code: " << e.getErrorCode();
-		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
-	}
+	std::cout << tracker.getGamerScore("test_cheevo") << std::endl;
 
 	cin.get();
 
